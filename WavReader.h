@@ -10,7 +10,6 @@
 
 bool hasExtension(const std::string& text, const std::string& substring);
 
-// START:WavReader
 class WavReader {
 public:
    WavReader(const std::string& source, const std::string& dest);
@@ -23,10 +22,15 @@ public:
    void listAll() const;
    void publishSnippets();
 
+// START:WavReader
 // START_HIGHLIGHT
-   void writeSamples(out, data, startingSample, samplesToWrite, bytesPerSample) {
-   }
+   void writeSamples(std::ofstream& out, char* data, 
+         uint32_t startingSample, 
+         uint32_t samplesToWrite, 
+         uint32_t bytesPerSample) {
 // END_HIGHLIGHT
+   }
+// END:WavReader
 
 private:
    rlog::StdioNode log{STDERR_FILENO};
@@ -38,6 +42,5 @@ private:
    std::string source_;
    std::string dest_;
 };
-// END:WavReader
 
 #endif  
