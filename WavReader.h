@@ -7,6 +7,7 @@
 
 #include "WavDescriptor.h"
 #include "rlog/StdioNode.h"
+#include "rlog/RLogChannel.h"
 
 bool hasExtension(const std::string& text, const std::string& substring);
 
@@ -36,6 +37,8 @@ private:
 
    void seekToEndOfHeader(std::ifstream& file, int headerLength);
    std::string toString(int8_t* c, unsigned int size);
+
+   rlog::RLogChannel* channel;
 
    std::string source_;
    std::string dest_;
