@@ -21,16 +21,14 @@ public:
          std::vector<boost::filesystem::path>& found) const;
    void listAll() const;
    void publishSnippets();
-
-// START:WavReader
-// START_HIGHLIGHT
+// START:writeSamples
+public:
+   // ...
    void writeSamples(std::ofstream& out, char* data, 
          uint32_t startingSample, 
          uint32_t samplesToWrite, 
-         uint32_t bytesPerSample) {
-// END_HIGHLIGHT
-   }
-// END:WavReader
+         uint32_t bytesPerSample);
+// END:writeSamples
 
 private:
    rlog::StdioNode log{STDERR_FILENO};
