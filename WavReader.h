@@ -23,15 +23,16 @@ public:
    void listAll() const;
    void publishSnippets();
 public:
-// START:writeSamples
    void writeSamples(std::ostream* out, char* data, 
          uint32_t startingSample, 
          uint32_t samplesToWrite, 
          uint32_t bytesPerSample,
-// START_HIGHLIGHT
          uint32_t channels=1);
-// END_HIGHLIGHT
-// END:writeSamples
+
+   uint32_t dataLength(
+         uint32_t samples, 
+         uint32_t bytesPerSample,
+         uint32_t channels) const;
 
 private:
    rlog::StdioNode log{STDERR_FILENO};

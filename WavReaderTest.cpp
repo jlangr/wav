@@ -63,3 +63,19 @@ TEST(WavReader_WriteSamples, IncorporatesChannelCount) {
 }
 // END:test
 
+
+// START:test
+TEST_GROUP(WavReader_DataLength) {
+   WavReader reader{"",""};
+};
+
+TEST(WavReader_DataLength, IsProductOfChannels_BytesPerSample_and_Samples) {
+   uint32_t bytesPerSample{ 2 };
+   uint32_t samples { 5 };
+   uint32_t channels { 4 };
+
+   uint32_t length { reader.dataLength(bytesPerSample, samples, channels) };
+
+   CHECK_EQUAL(2 * 5 * 4, length);
+}
+// END:test
