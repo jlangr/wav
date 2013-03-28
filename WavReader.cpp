@@ -64,6 +64,7 @@ WavReader::WavReader(const std::string& source, const std::string& dest)
 
 WavReader::~WavReader() {
    delete descriptor_;
+   delete channel;
 }
 
 void WavReader::publishSnippets() {
