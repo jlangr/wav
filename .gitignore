@@ -1,0 +1,8 @@
+build
+*.swp
+*.swo
+test.dat
+*.wav
+publish
+tags
+

@@ -1,0 +1,3 @@
+when doing cmake:
+
+cmake -DBOOST_ROOT=/home/jeff/boost_1_51_0 ..
