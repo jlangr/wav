@@ -1,4 +1,3 @@
-// START:test
 #include "CppUTest/TestHarness.h"
 
 #include "WavReader.h"
@@ -11,7 +10,6 @@ using namespace std;
 TEST_GROUP(WavReader) {
 };
 
-// END:test
 TEST(WavReader, HasExtension) {
    string s{"a.bcd"};
    CHECK(!hasExtension(s, "xxxx"));
@@ -48,7 +46,6 @@ TEST(WavReader_WriteSamples, WritesMultibyteSampleFromMiddle) {
    CHECK_EQUAL("89ABCD", out.str());
 }
 
-// START:test
 TEST(WavReader_WriteSamples, IncorporatesChannelCount) {
    char data[] { "0123456789ABCDEFG" };
    uint32_t bytesPerSample { 2 };
@@ -61,8 +58,6 @@ TEST(WavReader_WriteSamples, IncorporatesChannelCount) {
 
    CHECK_EQUAL("01234567", out.str());
 }
-// END:test
-
 
 // START:test
 TEST_GROUP(WavReader_DataLength) {

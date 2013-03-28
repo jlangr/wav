@@ -219,13 +219,16 @@ void WavReader::open(const std::string& name, bool trace) {
    // ...
    rLog(channel, "total seconds %i ", totalSeconds);
 
+// START_HIGHLIGHT
    dataChunk.length = dataLength(
          samplesToWrite, 
          bytesPerSample, 
          formatSubchunk.channels);
+// END_HIGHLIGHT
 
    out.write(reinterpret_cast<char*>(&dataChunk), sizeof(DataChunk));
    // ...
+
 // END:dataLength
 
    uint32_t startingSample{
