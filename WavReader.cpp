@@ -30,21 +30,8 @@ struct FormatSubchunkHeader {
    uint32_t subchunkSize;
 };
 
-struct FormatSubchunk {
-   uint16_t formatTag;
-   uint16_t channels;
-   uint32_t samplesPerSecond;
-   uint32_t averageBytesPerSecond;
-   uint16_t blockAlign;
-   uint16_t bitsPerSample;
-};
-
 struct FactOrData {
    int8_t tag[4];
-};
-
-struct DataChunk {
-   uint32_t length;
 };
 
 struct FactChunk {
@@ -195,6 +182,7 @@ void WavReader::readAndWriteHeaders(
 // START:open
 }
 
+// START:writeSnippet
 void WavReader::writeSnippet(
       const string& name, istream& file, ostream& out,
       FormatSubchunk& formatSubchunk,
@@ -210,9 +198,13 @@ void WavReader::writeSnippet(
 
    samplesToWrite = min(samplesToWrite, totalSamples);
 
-   uint32_t totalSeconds{totalSamples / formatSubchunk.samplesPerSecond};
+// START_HIGHLIGHT
+   totalSeconds = totalSamples / formatSubchunk.samplesPerSecond;
+// END_HIGHLIGHT
 
    rLog(channel, "total seconds %i ", totalSeconds);
+   // ...
+// END:writeSnippet
 
    dataChunk.length = dataLength(
          samplesToWrite, 
@@ -231,8 +223,10 @@ void WavReader::writeSnippet(
          totalSeconds, formatSubchunk.samplesPerSecond, formatSubchunk.channels);
    
    //out.close(); // ostreams are RAII
+// START:writeSnippet
 }
 // END:open
+// END:writeSnippet
 
 uint32_t WavReader::dataLength(
       uint32_t samples, 

@@ -59,7 +59,6 @@ TEST(WavReader_WriteSamples, IncorporatesChannelCount) {
    CHECK_EQUAL("01234567", out.str());
 }
 
-// START:test
 TEST_GROUP(WavReader_DataLength) {
    WavReader reader{"",""};
 };
@@ -73,4 +72,34 @@ TEST(WavReader_DataLength, IsProductOfChannels_BytesPerSample_and_Samples) {
 
    CHECK_EQUAL(2 * 5 * 4, length);
 }
+
+// START:test
+TEST_GROUP(WavReader_WriteSnippet) {
+   WavReader reader{"",""};
+   istringstream input{""};
+   FormatSubchunk formatSubchunk;
+   ostringstream output;
+   DataChunk dataChunk;
+   char* data;
+   uint32_t TwoBytesWorthOfBits{2 * 8};
+
+   void setup() {
+      data = new char[4];
+   }
+
+   void teardown() {
+      delete[] data;
+   }
+};
+
+TEST(WavReader_WriteSnippet, UpdatesTotalSeconds) {
+   dataChunk.length = 8;
+   formatSubchunk.bitsPerSample = TwoBytesWorthOfBits;
+   formatSubchunk.samplesPerSecond = 1;
+
+   reader.writeSnippet("any", input, output, formatSubchunk, dataChunk, data);
+
+   CHECK_EQUAL(8 / 2 / 1, reader.totalSeconds);
+}
 // END:test
+

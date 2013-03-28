@@ -11,9 +11,20 @@
 
 bool hasExtension(const std::string& text, const std::string& substring);
 
-struct FormatSubchunk;
 struct FormatSubchunkHeader;
-struct DataChunk;
+
+struct FormatSubchunk {
+   uint16_t formatTag;
+   uint16_t channels;
+   uint32_t samplesPerSecond;
+   uint32_t averageBytesPerSecond;
+   uint16_t blockAlign;
+   uint16_t bitsPerSample;
+};
+
+struct DataChunk {
+   uint32_t length;
+};
 
 class WavReader {
 public:
@@ -26,7 +37,10 @@ public:
          std::vector<boost::filesystem::path>& found) const;
    void listAll() const;
    void publishSnippets();
+// START:spy
 public:
+   // ...
+// END:spy
    void writeSamples(std::ostream* out, char* data, 
          uint32_t startingSample, 
          uint32_t samplesToWrite, 
@@ -43,6 +57,10 @@ public:
          FormatSubchunk& formatSubchunk,
          DataChunk& dataChunk,
          char* data);
+
+// START:spy
+   uint32_t totalSeconds;
+// END:spy
 
 private:
    rlog::StdioNode log{STDERR_FILENO};
