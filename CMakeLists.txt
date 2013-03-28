@@ -9,8 +9,8 @@ add_subdirectory(rlog)
 add_definitions(-std=c++0x)
 
 set(CMAKE_CXX_FLAGS "${CMAXE_CXX_FLAGS} -DRLOG_COMPONENT=debug -Wall")
-set(sources WavReader.cpp WavDescriptor.cpp)
-set(testSources WavReaderTest.cpp)
+set(sources FileUtil.cpp StreamUtil.cpp WavReader.cpp WavDescriptor.cpp)
+set(testSources FileUtilTest.cpp StreamUtilTest.cpp WavReaderTest.cpp)
 add_executable(utest testmain.cpp ${testSources} ${sources})
 add_executable(SnippetPublisher main.cpp ${sources})
 
