@@ -13,8 +13,6 @@ using namespace std;
 using namespace boost::filesystem;
 using namespace rlog;
 
-static RLogChannel *channel = DEF_CHANNEL("info/wav", Log_Debug);
-
 bool hasExtension(const string& filename, const string& s) {
    string ext{"." + s};
    if (ext.length() > filename.length()) return false;
@@ -59,12 +57,14 @@ WavReader::WavReader(const std::string& source, const std::string& dest)
    , dest_(dest) {
    descriptor_ = new WavDescriptor(dest);
 
+   channel = DEF_CHANNEL("info/wav", Log_Debug);
    log.subscribeTo((RLogNode*)RLOG_CHANNEL("info/wav"));
    rLog(channel, "reading from %s writing to %s", source.c_str(), dest.c_str());
 }
 
 WavReader::~WavReader() {
    delete descriptor_;
+   delete channel;
 }
 
 void WavReader::publishSnippets() {
