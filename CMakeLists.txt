@@ -2,13 +2,9 @@ project(SnippetPublisher)
 cmake_minimum_required(VERSION 2.6)
 
 include_directories(~/boost_1_51_0 ~/rlog-1.4 ~/cpputest/include)
-# START_HIGHLIGHT
 link_directories(~/rlog-1.4/rlog/.libs ${RLOG_BINARY_DIR}/rlog ~/cpputest)
-# END_HIGHLIGHT
 
-# START_HIGHLIGHT
 add_subdirectory(rlog)
-# END_HIGHLIGHT
 
 add_definitions(-std=c++0x)
 
@@ -23,9 +19,7 @@ target_link_libraries(utest ${Boost_LIBRARIES})
 target_link_libraries(utest CppUTest)
 target_link_libraries(utest pthread)
 target_link_libraries(utest rt)
-# START_HIGHLIGHT
 target_link_libraries(utest rlogStub)
-# END_HIGHLIGHT
 
 target_link_libraries(SnippetPublisher ${Boost_LIBRARIES})
 target_link_libraries(SnippetPublisher pthread)
