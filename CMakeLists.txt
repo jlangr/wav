@@ -17,7 +17,9 @@ target_link_libraries(utest ${Boost_LIBRARIES})
 target_link_libraries(utest CppUTest)
 target_link_libraries(utest pthread)
 target_link_libraries(utest rt)
-target_link_libraries(utest rlog)
+# START_HIGHLIGHT
+#target_link_libraries(utest rlog)
+# END_HIGHLIGHT
 
 target_link_libraries(SnippetPublisher ${Boost_LIBRARIES})
 target_link_libraries(SnippetPublisher pthread)
