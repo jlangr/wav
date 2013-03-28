@@ -222,8 +222,8 @@ void WavReader::open(const std::string& name, bool trace) {
 
    rLog(channel, "completed writing %s", name.c_str());
 
-//   descriptor_->add(dest_, name, 
-//         totalSeconds, formatSubchunk.samplesPerSecond, formatSubchunk.channels);
+   descriptor_->add(dest_, name, 
+         totalSeconds, formatSubchunk.samplesPerSecond, formatSubchunk.channels);
    
    out.close();
 }
