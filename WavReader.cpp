@@ -80,7 +80,6 @@ string WavReader::toString(int8_t* bytes, unsigned int size) {
    return string{(char*)bytes, size};
 }
 
-// START:open
 void WavReader::open(const std::string& name, bool trace) {
    rLog(channel, "opening %s", name.c_str());
 
@@ -178,7 +177,6 @@ void WavReader::open(const std::string& name, bool trace) {
 
    // TODO: multiple channels
 
-// START_HIGHLIGHT
    uint32_t secondsDesired{10};
    if (formatSubchunk.bitsPerSample == 0) formatSubchunk.bitsPerSample = 8;
    uint32_t bytesPerSample{formatSubchunk.bitsPerSample / uint32_t{8}};
@@ -194,8 +192,13 @@ void WavReader::open(const std::string& name, bool trace) {
    dataChunk.length = samplesToWrite * bytesPerSample;
    out.write(reinterpret_cast<char*>(&dataChunk), sizeof(DataChunk));
 
+// START:call
    uint32_t startingSample{
       totalSeconds >= 10 ? 10 * formatSubchunk.samplesPerSecond : 0};
+
+// START_HIGHLIGHT
+   writeSamples(out, data, startingSample, samplesToWrite, bytesPerSample);
+// END_HIGHLIGHT
 
    rLog(channel, "writing %i samples", samplesToWrite);
 
@@ -206,15 +209,14 @@ void WavReader::open(const std::string& name, bool trace) {
       for (uint32_t byte{0}; byte < bytesPerSample; byte++) 
          out.put(data[byteOffsetForSample + byte]);
    }
-// END_HIGHLIGHT
    rLog(channel, "completed writing %s", name.c_str());
 
    descriptor_->add(dest_, name, 
          totalSeconds, formatSubchunk.samplesPerSecond, formatSubchunk.channels);
+// END:call
    
    out.close();
 }
-// END:open
 
 void WavReader::seekToEndOfHeader(ifstream& file, int subchunkSize) {
    auto bytes = subchunkSize - sizeof(FormatSubchunk) + 1;
