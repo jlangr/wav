@@ -85,6 +85,15 @@ void WavReader::writeSamples(ofstream& out, char* data,
       uint32_t startingSample, 
       uint32_t samplesToWrite, 
       uint32_t bytesPerSample) {
+   rLog(channel, "writing %i samples", samplesToWrite);
+
+   for (auto sample = startingSample; 
+        sample < startingSample + samplesToWrite; 
+        sample++) {
+      auto byteOffsetForSample = sample * bytesPerSample;
+      for (uint32_t byte{0}; byte < bytesPerSample; byte++) 
+         out.put(data[byteOffsetForSample + byte]);
+   }
 }
 // END:writeSamples
 
@@ -208,15 +217,6 @@ void WavReader::open(const std::string& name, bool trace) {
    writeSamples(out, data, startingSample, samplesToWrite, bytesPerSample);
 // END_HIGHLIGHT
 
-   rLog(channel, "writing %i samples", samplesToWrite);
-
-   for (auto sample = startingSample; 
-        sample < startingSample + samplesToWrite; 
-        sample++) {
-      auto byteOffsetForSample = sample * bytesPerSample;
-      for (uint32_t byte{0}; byte < bytesPerSample; byte++) 
-         out.put(data[byteOffsetForSample + byte]);
-   }
    rLog(channel, "completed writing %s", name.c_str());
 
    descriptor_->add(dest_, name, 
