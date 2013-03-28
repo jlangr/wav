@@ -13,8 +13,6 @@ using namespace std;
 using namespace boost::filesystem;
 using namespace rlog;
 
-static RLogChannel *channel = DEF_CHANNEL("info/wav", Log_Debug);
-
 bool hasExtension(const string& filename, const string& s) {
    string ext{"." + s};
    if (ext.length() > filename.length()) return false;
@@ -59,12 +57,14 @@ WavReader::WavReader(const std::string& source, const std::string& dest)
    , dest_(dest) {
    descriptor_ = new WavDescriptor(dest);
 
+   channel = DEF_CHANNEL("info/wav", Log_Debug);
    log.subscribeTo((RLogNode*)RLOG_CHANNEL("info/wav"));
    rLog(channel, "reading from %s writing to %s", source.c_str(), dest.c_str());
 }
 
 WavReader::~WavReader() {
    delete descriptor_;
+   delete channel;
 }
 
 void WavReader::publishSnippets() {
@@ -81,7 +81,9 @@ string WavReader::toString(int8_t* bytes, unsigned int size) {
 }
 
 // START:writeSamples
-void WavReader::writeSamples(ofstream& out, char* data, 
+// START_HIGHLIGHT
+void WavReader::writeSamples(ostream* out, char* data, 
+// END_HIGHLIGHT
       uint32_t startingSample, 
       uint32_t samplesToWrite, 
       uint32_t bytesPerSample) {
@@ -92,7 +94,9 @@ void WavReader::writeSamples(ofstream& out, char* data,
         sample++) {
       auto byteOffsetForSample = sample * bytesPerSample;
       for (uint32_t byte{0}; byte < bytesPerSample; byte++) 
-         out.put(data[byteOffsetForSample + byte]);
+// START_HIGHLIGHT
+         out->put(data[byteOffsetForSample + byte]);
+// END_HIGHLIGHT
    }
 }
 // END:writeSamples
@@ -209,19 +213,17 @@ void WavReader::open(const std::string& name, bool trace) {
    dataChunk.length = samplesToWrite * bytesPerSample;
    out.write(reinterpret_cast<char*>(&dataChunk), sizeof(DataChunk));
 
-// START:call
    uint32_t startingSample{
       totalSeconds >= 10 ? 10 * formatSubchunk.samplesPerSecond : 0};
 
-// START_HIGHLIGHT
-   writeSamples(out, data, startingSample, samplesToWrite, bytesPerSample);
-// END_HIGHLIGHT
+// START:call
+   writeSamples(&out, data, startingSample, samplesToWrite, bytesPerSample);
+// END:call
 
    rLog(channel, "completed writing %s", name.c_str());
 
-   descriptor_->add(dest_, name, 
-         totalSeconds, formatSubchunk.samplesPerSecond, formatSubchunk.channels);
-// END:call
+//   descriptor_->add(dest_, name, 
+//         totalSeconds, formatSubchunk.samplesPerSecond, formatSubchunk.channels);
    
    out.close();
 }

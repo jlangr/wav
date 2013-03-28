@@ -7,6 +7,7 @@
 
 #include "WavDescriptor.h"
 #include "rlog/StdioNode.h"
+#include "rlog/RLogChannel.h"
 
 bool hasExtension(const std::string& text, const std::string& substring);
 
@@ -21,10 +22,11 @@ public:
          std::vector<boost::filesystem::path>& found) const;
    void listAll() const;
    void publishSnippets();
-// START:writeSamples
 public:
-   // ...
-   void writeSamples(std::ofstream& out, char* data, 
+// START:writeSamples
+// START_HIGHLIGHT
+   void writeSamples(std::ostream* out, char* data, 
+// END_HIGHLIGHT
          uint32_t startingSample, 
          uint32_t samplesToWrite, 
          uint32_t bytesPerSample);
@@ -36,6 +38,8 @@ private:
 
    void seekToEndOfHeader(std::ifstream& file, int headerLength);
    std::string toString(int8_t* c, unsigned int size);
+
+   rlog::RLogChannel* channel;
 
    std::string source_;
    std::string dest_;
