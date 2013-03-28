@@ -24,12 +24,13 @@ public:
    void publishSnippets();
 public:
 // START:writeSamples
-// START_HIGHLIGHT
    void writeSamples(std::ostream* out, char* data, 
-// END_HIGHLIGHT
          uint32_t startingSample, 
          uint32_t samplesToWrite, 
-         uint32_t bytesPerSample);
+         uint32_t bytesPerSample,
+// START_HIGHLIGHT
+         uint32_t channels=1);
+// END_HIGHLIGHT
 // END:writeSamples
 
 private:
