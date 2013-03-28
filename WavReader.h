@@ -23,11 +23,6 @@ public:
    void listAll() const;
    void publishSnippets();
 
-// START_HIGHLIGHT
-   void writeSamples(out, data, startingSample, samplesToWrite, bytesPerSample) {
-   }
-// END_HIGHLIGHT
-
 private:
    rlog::StdioNode log{STDERR_FILENO};
    WavDescriptor* descriptor_;

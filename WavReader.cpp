@@ -80,6 +80,11 @@ string WavReader::toString(int8_t* bytes, unsigned int size) {
    return string{(char*)bytes, size};
 }
 
+// START:writeSamples
+void writeSamples(out, data, startingSample, samplesToWrite, bytesPerSample) {
+}
+// END:writeSamples
+
 void WavReader::open(const std::string& name, bool trace) {
    rLog(channel, "opening %s", name.c_str());
 
