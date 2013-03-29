@@ -65,7 +65,7 @@ WavReader::~WavReader() {
 // END_HIGHLIGHT
    delete channel;
 }
-// START:ctor
+// END:ctor
 
 void WavReader::publishSnippets() {
    directory_iterator itEnd; 
