@@ -7,6 +7,7 @@
 #include <boost/filesystem.hpp>
 
 #include "WavDescriptor.h"
+#include "FileUtil.h"
 #include "rlog/StdioNode.h"
 #include "rlog/RLogChannel.h"
 
@@ -62,6 +63,8 @@ public:
          DataChunk& dataChunk,
          char* data);
 
+   void useFileUtil(std::shared_ptr<FileUtil>);
+
 private:
    rlog::StdioNode log{STDERR_FILENO};
 
@@ -83,11 +86,8 @@ private:
 
    std::string source_;
    std::string dest_;
-// START:spy
-private:
-   // ...
    std::shared_ptr<WavDescriptor> descriptor_;
+   std::shared_ptr<FileUtil> fileUtil_;
 };
-// END:spy
 
 #endif  

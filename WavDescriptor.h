@@ -25,7 +25,7 @@ public:
    virtual void add(
       const std::string& dir, const std::string& filename, 
       uint32_t totalSeconds, uint32_t samplesPerSecond, 
-      uint32_t channels) {
+      uint32_t channels, uint32_t fileSize) {
       // ...
 // END_HIGHLIGHT
       WavDescriptorRecord rec;

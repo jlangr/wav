@@ -75,28 +75,40 @@ TEST(WavReader_DataLength, IsProductOfChannels_BytesPerSample_and_Samples) {
    CHECK_EQUAL(2 * 5 * 4, length);
 }
 
-// START:mock
+// START:test
 class MockWavDescriptor : public WavDescriptor {
 public:
    MockWavDescriptor(): WavDescriptor("") {}
    void add(
       const string&, const string&, 
       uint32_t totalSeconds, 
-      uint32_t, uint32_t) {
-// START_HIGHLIGHT
+      uint32_t, uint32_t,
+      uint32_t fileSize) {
       mock().actualCall("add")
-         .withParameter("totalSeconds", (int)totalSeconds);
+         .withParameter("totalSeconds", (int)totalSeconds)
+// START_HIGHLIGHT
+         .withParameter("fileSize", (int)fileSize);
 // END_HIGHLIGHT
    }
 };
-// END:mock
 
-// START:testgroup
-TEST_GROUP(WavReader_WriteSnippet) {
 // START_HIGHLIGHT
+class MockFileUtil: public FileUtil {
+public:
+   streamsize size(const string& name) {
+      return mock().actualCall("size").returnValue().getIntValue();
+   }
+};
+// END_HIGHLIGHT
+
+TEST_GROUP(WavReader_WriteSnippet) {
    shared_ptr<MockWavDescriptor> descriptor{new MockWavDescriptor};
    WavReader reader{"", "", descriptor};
+
+// START_HIGHLIGHT
+   shared_ptr<MockFileUtil> fileUtil{make_shared<MockFileUtil>()};
 // END_HIGHLIGHT
+
    istringstream input{""};
    FormatSubchunk formatSubchunk;
    ostringstream output;
@@ -104,8 +116,13 @@ TEST_GROUP(WavReader_WriteSnippet) {
    char* data;
    uint32_t TwoBytesWorthOfBits{2 * 8};
 
+   const int ArbitraryFileSize{5};
+
    void setup() {
       data = new char[4];
+// START_HIGHLIGHT
+      reader.useFileUtil(fileUtil);
+// END_HIGHLIGHT
    }
 
    void teardown() {
@@ -113,21 +130,22 @@ TEST_GROUP(WavReader_WriteSnippet) {
       delete[] data;
    }
 };
-// END:testgroup
 
-// START:test
-TEST(WavReader_WriteSnippet, UpdatesTotalSeconds) {
+TEST(WavReader_WriteSnippet, SendsFileLengthAndTotalSecondsToDescriptor) {
    dataChunk.length = 8;
    formatSubchunk.bitsPerSample = TwoBytesWorthOfBits;
    formatSubchunk.samplesPerSecond = 1;
 // START_HIGHLIGHT
-   mock().expectOneCall("add").withParameter("totalSeconds", 8 / 2 / 1);
+   mock().expectOneCall("size").andReturnValue(ArbitraryFileSize);
+// END_HIGHLIGHT
+   mock().expectOneCall("add")
+      .withParameter("totalSeconds", 8 / 2 / 1)
+// START_HIGHLIGHT
+      .withParameter("fileSize", ArbitraryFileSize);
 // END_HIGHLIGHT
 
    reader.writeSnippet("any", input, output, formatSubchunk, dataChunk, data);
 
-// START_HIGHLIGHT
    mock().checkExpectations();
-// END_HIGHLIGHT
 }
 // END:test

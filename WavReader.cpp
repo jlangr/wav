@@ -67,6 +67,10 @@ WavReader::~WavReader() {
 }
 // END:ctor
 
+void WavReader::useFileUtil(shared_ptr<FileUtil> fileUtil) {
+   fileUtil_ = fileUtil;
+}
+
 void WavReader::publishSnippets() {
    directory_iterator itEnd; 
    for (directory_iterator it(source_); it != itEnd; ++it) 
@@ -202,6 +206,8 @@ void WavReader::writeSnippet(
       DataChunk& dataChunk,
       char* data
       ) {
+   // ...
+// END:writeSnippet
    uint32_t secondsDesired{10};
    if (formatSubchunk.bitsPerSample == 0) formatSubchunk.bitsPerSample = 8;
    uint32_t bytesPerSample{formatSubchunk.bitsPerSample / uint32_t{8}};
@@ -211,13 +217,9 @@ void WavReader::writeSnippet(
 
    samplesToWrite = min(samplesToWrite, totalSamples);
 
-// START_HIGHLIGHT
    uint32_t totalSeconds { totalSamples / formatSubchunk.samplesPerSecond };
-// END_HIGHLIGHT
 
    rLog(channel, "total seconds %i ", totalSeconds);
-   // ...
-// END:writeSnippet
 
    dataChunk.length = dataLength(
          samplesToWrite, 
@@ -228,15 +230,22 @@ void WavReader::writeSnippet(
    uint32_t startingSample{
       totalSeconds >= 10 ? 10 * formatSubchunk.samplesPerSecond : 0};
 
+// START:writeSnippet
    writeSamples(&out, data, startingSample, samplesToWrite, bytesPerSample);
 
    rLog(channel, "completed writing %s", name.c_str());
 
+// START_HIGHLIGHT
+   auto fileSize = fileUtil_->size(name);
+// END_HIGHLIGHT
+
    descriptor_->add(dest_, name, 
-         totalSeconds, formatSubchunk.samplesPerSecond, formatSubchunk.channels);
+         totalSeconds, formatSubchunk.samplesPerSecond, formatSubchunk.channels,
+// START_HIGHLIGHT
+         fileSize);
+// END_HIGHLIGHT
    
    //out.close(); // ostreams are RAII
-// START:writeSnippet
 }
 // END:open
 // END:writeSnippet
