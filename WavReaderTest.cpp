@@ -80,13 +80,15 @@ class MockWavDescriptor : public WavDescriptor {
 public:
    MockWavDescriptor(): WavDescriptor("") {}
    void add(const string&, const string&, uint32_t totalSeconds, uint32_t, uint32_t) {
+// START_HIGHLIGHT
       mock().actualCall("add")
          .withParameter("totalSeconds", (int)totalSeconds);
+// END_HIGHLIGHT
    }
 };
 // END:mock
 
-// START:test
+// START:testgroup
 TEST_GROUP(WavReader_WriteSnippet) {
 // START_HIGHLIGHT
    shared_ptr<MockWavDescriptor> descriptor{new MockWavDescriptor};
@@ -108,7 +110,9 @@ TEST_GROUP(WavReader_WriteSnippet) {
       delete[] data;
    }
 };
+// END:testgroup
 
+// START:test
 TEST(WavReader_WriteSnippet, UpdatesTotalSeconds) {
    dataChunk.length = 8;
    formatSubchunk.bitsPerSample = TwoBytesWorthOfBits;
@@ -119,6 +123,8 @@ TEST(WavReader_WriteSnippet, UpdatesTotalSeconds) {
 
    reader.writeSnippet("any", input, output, formatSubchunk, dataChunk, data);
 
+// START_HIGHLIGHT
    mock().checkExpectations();
+// END_HIGHLIGHT
 }
 // END:test
