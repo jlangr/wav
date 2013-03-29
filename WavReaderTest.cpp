@@ -75,8 +75,7 @@ TEST(WavReader_DataLength, IsProductOfChannels_BytesPerSample_and_Samples) {
    CHECK_EQUAL(2 * 5 * 4, length);
 }
 
-// START:test
-// START_HIGHLIGHT
+// START:mock
 class MockWavDescriptor : public WavDescriptor {
 public:
    MockWavDescriptor(): WavDescriptor("") {}
@@ -85,7 +84,9 @@ public:
          .withParameter("totalSeconds", (int)totalSeconds);
    }
 };
+// END:mock
 
+// START:test
 TEST_GROUP(WavReader_WriteSnippet) {
 // START_HIGHLIGHT
    shared_ptr<MockWavDescriptor> descriptor{new MockWavDescriptor};
