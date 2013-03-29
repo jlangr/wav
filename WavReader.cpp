@@ -3,6 +3,7 @@
 // START:snippet
 #include "Snippet.h"
 // ...
+// END:snippet
 
 #include <iostream>
 #include <cstring>
