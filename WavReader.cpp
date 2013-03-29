@@ -39,10 +39,20 @@ struct FactChunk {
    uint32_t samplesPerChannel;
 };
 
-WavReader::WavReader(const std::string& source, const std::string& dest) 
+// START:ctor
+WavReader::WavReader(
+      const std::string& source, 
+      const std::string& dest,
+// START_HIGHLIGHT
+      shared_ptr<WavDescriptor> descriptor) 
+// END_HIGHLIGHT
    : source_(source)
-   , dest_(dest) {
-   descriptor_ = new WavDescriptor(dest);
+   , dest_(dest)
+// START_HIGHLIGHT
+   , descriptor_(descriptor) {
+   if (!descriptor_)
+      descriptor_ = make_shared<WavDescriptor>(dest);
+// END_HIGHLIGHT
 
    channel = DEF_CHANNEL("info/wav", Log_Debug);
    log.subscribeTo((RLogNode*)RLOG_CHANNEL("info/wav"));
@@ -50,9 +60,12 @@ WavReader::WavReader(const std::string& source, const std::string& dest)
 }
 
 WavReader::~WavReader() {
-   delete descriptor_;
+// START_HIGHLIGHT
+   descriptor_.reset();
+// END_HIGHLIGHT
    delete channel;
 }
+// START:ctor
 
 void WavReader::publishSnippets() {
    directory_iterator itEnd; 
@@ -199,7 +212,7 @@ void WavReader::writeSnippet(
    samplesToWrite = min(samplesToWrite, totalSamples);
 
 // START_HIGHLIGHT
-   totalSeconds = totalSamples / formatSubchunk.samplesPerSecond;
+   uint32_t totalSeconds { totalSamples / formatSubchunk.samplesPerSecond };
 // END_HIGHLIGHT
 
    rLog(channel, "total seconds %i ", totalSeconds);

@@ -1,9 +1,11 @@
 #include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockSupport.h"
 
 #include "WavReader.h"
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <memory>
 
 using namespace std;
 
@@ -74,8 +76,21 @@ TEST(WavReader_DataLength, IsProductOfChannels_BytesPerSample_and_Samples) {
 }
 
 // START:test
+// START_HIGHLIGHT
+class MockWavDescriptor : public WavDescriptor {
+public:
+   MockWavDescriptor(): WavDescriptor("") {}
+   void add(const string&, const string&, uint32_t totalSeconds, uint32_t, uint32_t) {
+      mock().actualCall("add")
+         .withParameter("totalSeconds", (int)totalSeconds);
+   }
+};
+
 TEST_GROUP(WavReader_WriteSnippet) {
-   WavReader reader{"",""};
+// START_HIGHLIGHT
+   shared_ptr<MockWavDescriptor> descriptor{new MockWavDescriptor};
+   WavReader reader{"", "", descriptor};
+// END_HIGHLIGHT
    istringstream input{""};
    FormatSubchunk formatSubchunk;
    ostringstream output;
@@ -88,6 +103,7 @@ TEST_GROUP(WavReader_WriteSnippet) {
    }
 
    void teardown() {
+      mock().clear();
       delete[] data;
    }
 };
@@ -96,10 +112,12 @@ TEST(WavReader_WriteSnippet, UpdatesTotalSeconds) {
    dataChunk.length = 8;
    formatSubchunk.bitsPerSample = TwoBytesWorthOfBits;
    formatSubchunk.samplesPerSecond = 1;
+// START_HIGHLIGHT
+   mock().expectOneCall("add").withParameter("totalSeconds", 8 / 2 / 1);
+// END_HIGHLIGHT
 
    reader.writeSnippet("any", input, output, formatSubchunk, dataChunk, data);
 
-   CHECK_EQUAL(8 / 2 / 1, reader.totalSeconds);
+   mock().checkExpectations();
 }
 // END:test
-
