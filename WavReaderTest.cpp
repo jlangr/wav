@@ -79,7 +79,10 @@ TEST(WavReader_DataLength, IsProductOfChannels_BytesPerSample_and_Samples) {
 class MockWavDescriptor : public WavDescriptor {
 public:
    MockWavDescriptor(): WavDescriptor("") {}
-   void add(const string&, const string&, uint32_t totalSeconds, uint32_t, uint32_t) {
+   void add(
+      const string&, const string&, 
+      uint32_t totalSeconds, 
+      uint32_t, uint32_t) {
 // START_HIGHLIGHT
       mock().actualCall("add")
          .withParameter("totalSeconds", (int)totalSeconds);

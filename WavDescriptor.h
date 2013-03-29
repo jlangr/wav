@@ -22,7 +22,10 @@ public:
 
 // START:virtual
 // START_HIGHLIGHT
-   virtual void add(const std::string& dir, const std::string& filename, uint32_t totalSeconds, uint32_t samplesPerSecond, uint32_t channels) {
+   virtual void add(
+      const std::string& dir, const std::string& filename, 
+      uint32_t totalSeconds, uint32_t samplesPerSecond, 
+      uint32_t channels) {
       // ...
 // END_HIGHLIGHT
       WavDescriptorRecord rec;
