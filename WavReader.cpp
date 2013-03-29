@@ -1,5 +1,8 @@
 #include "WavReader.h"
 #include "WavDescriptor.h"
+// START:snippet
+#include "Snippet.h"
+// ...
 
 #include <iostream>
 #include <cstring>
@@ -84,8 +87,10 @@ string WavReader::toString(int8_t* bytes, unsigned int size) {
    return string{(char*)bytes, size};
 }
 
-// START:open
+// START:snippet
 void WavReader::open(const std::string& name, bool trace) {
+   // ...
+// END:snippet
    rLog(channel, "opening %s", name.c_str());
 
    ifstream file{name, ios::in | ios::binary};
@@ -108,10 +113,15 @@ void WavReader::open(const std::string& name, bool trace) {
    rLog(channel, "subchunk size = %i", formatSubchunkHeader.subchunkSize);
    rLog(channel, "data length = %i", dataChunk.length);
    
+// START:snippet
    auto data = readData(file, dataChunk.length); // leak!
    
-   writeSnippet(name, file, out, formatSubchunk, dataChunk, data);
+// START_HIGHLIGHT
+   Snippet snippet;
+   snippet.writeSnippet(name, file, out, formatSubchunk, dataChunk, data);
+// END_HIGHLIGHT
 }
+// END:snippet
 
 void WavReader::read(istream& file, DataChunk& dataChunk) {
    file.read(reinterpret_cast<char*>(&dataChunk), sizeof(DataChunk));
