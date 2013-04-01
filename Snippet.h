@@ -3,8 +3,10 @@
 
 using namespace std;
 
+// START:snippet
 class Snippet {
 public:
+// START_HIGHLIGHT
    uint32_t dataLength(
          uint32_t samples, 
          uint32_t bytesPerSample,
@@ -12,6 +14,8 @@ public:
          ) const {
       return samples * bytesPerSample * channels;
    }
+// END_HIGHLIGHT
 };
+// END:snippet
 
 #endif
