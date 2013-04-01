@@ -1,9 +1,6 @@
 #include "WavReader.h"
 #include "WavDescriptor.h"
-// START:snippet
 #include "Snippet.h"
-// ...
-// END:snippet
 
 #include <iostream>
 #include <cstring>
@@ -118,10 +115,7 @@ void WavReader::open(const std::string& name, bool trace) {
 // START:snippet
    auto data = readData(file, dataChunk.length); // leak!
    
-// START_HIGHLIGHT
-   Snippet snippet;
-   snippet.writeSnippet(name, file, out, formatSubchunk, dataChunk, data);
-// END_HIGHLIGHT
+   writeSnippet(name, file, out, formatSubchunk, dataChunk, data);
 }
 // END:snippet
 
