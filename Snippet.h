@@ -1,15 +1,22 @@
 #ifndef Snippet_h
 #define Snippet_h
 
-using namespace std;
+#include "FileUtil.h"
+#include "WavDescriptor.h"
+#include "WavStructs.h"
+#include "rlog/RLogChannel.h"
+#undef RLOG_SECTION
+#define RLOG_SECTION
+// see https://code.google.com/p/rlog/issues/detail?id=13
 
-// START:snippet
+#include <string>
+#include <memory>
+#include <algorithm>
+
 class Snippet {
 public:
-   // ... 
-// END:snippet
-   Snippet(shared_ptr<FileUtil> fileUtil,
-      shared_ptr<WavDescriptor> descriptor,
+   Snippet(std::shared_ptr<FileUtil> fileUtil,
+      std::shared_ptr<WavDescriptor> descriptor,
       const std::string& dest,
       rlog::RLogChannel* channel) 
       : fileUtil_(fileUtil)
@@ -17,9 +24,8 @@ public:
       , dest_(dest) 
       , channel_(channel) { }
 
-// START:snippet
-   void writeSnippet(
-         const string& name, istream& file, ostream& out,
+   void write(
+         const std::string& name, std::istream& file, std::ostream& out,
          FormatSubchunk& formatSubchunk,
          DataChunk& dataChunk,
          char* data
@@ -31,13 +37,11 @@ public:
       uint32_t samplesToWrite{secondsDesired * formatSubchunk.samplesPerSecond};
       uint32_t totalSamples{dataChunk.length / bytesPerSample};
 
-      samplesToWrite = min(samplesToWrite, totalSamples);
+      samplesToWrite = std::min(samplesToWrite, totalSamples);
 
       uint32_t totalSeconds { totalSamples / formatSubchunk.samplesPerSecond };
 
-// START_HIGHLIGHT
       rLog(channel_, "total seconds %i ", totalSeconds);
-// END_HIGHLIGHT
 
       dataChunk.length = dataLength(
             samplesToWrite, 
@@ -50,19 +54,14 @@ public:
 
       writeSamples(&out, data, startingSample, samplesToWrite, bytesPerSample);
 
-// START_HIGHLIGHT
       rLog(channel_, "completed writing %s", name.c_str());
-// END_HIGHLIGHT
 
       auto fileSize = fileUtil_->size(name);
 
       descriptor_->add(dest_, name, 
             totalSeconds, formatSubchunk.samplesPerSecond, formatSubchunk.channels,
             fileSize);
-      
-      //out.close(); // ostreams are RAII
    }
-// END:snippet
 
    uint32_t dataLength(
          uint32_t samples, 
@@ -72,19 +71,12 @@ public:
       return samples * bytesPerSample * channels;
    }
 
-// START:snippet
-   void writeSamples(ostream* out, char* data, 
+   void writeSamples(std::ostream* out, char* data, 
          uint32_t startingSample, 
          uint32_t samplesToWrite, 
          uint32_t bytesPerSample,
-// START_HIGHLIGHT
          uint32_t channels=1) {
-// END_HIGHLIGHT
-// START_HIGHLIGHT
       rLog(channel_, "writing %i samples", samplesToWrite);
-// END_HIGHLIGHT
-      // ...
-// END:snippet
 
       for (auto sample = startingSample; 
            sample < startingSample + samplesToWrite; 
@@ -97,17 +89,14 @@ public:
                out->put(data[byteOffsetForChannel + byte]);
          }
       }
-// START:snippet
    }
-// END:snippet
 
 private:
-   shared_ptr<FileUtil> fileUtil_;
-   shared_ptr<WavDescriptor> descriptor_;
-   const string dest_;
+   std::shared_ptr<FileUtil> fileUtil_;
+   std::shared_ptr<WavDescriptor> descriptor_;
+   const std::string dest_;
    rlog::RLogChannel* channel_;
-// START:snippet
 };
-// END:snippet
 
 #endif
+

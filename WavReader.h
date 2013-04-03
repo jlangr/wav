@@ -1,12 +1,10 @@
 #ifndef WavReader_h
 #define WavReader_h
 
-#include <string>
-#include <fstream>
-#include <memory>
 #include <boost/filesystem.hpp>
 
 #include "WavDescriptor.h"
+#include "WavStructs.h"
 #include "FileUtil.h"
 #include "rlog/StdioNode.h"
 #include "rlog/RLogChannel.h"
@@ -15,28 +13,12 @@ bool hasExtension(const std::string& text, const std::string& substring);
 
 struct FormatSubchunkHeader;
 
-struct FormatSubchunk {
-   uint16_t formatTag;
-   uint16_t channels;
-   uint32_t samplesPerSecond;
-   uint32_t averageBytesPerSecond;
-   uint16_t blockAlign;
-   uint16_t bitsPerSample;
-};
-
-struct DataChunk {
-   uint32_t length;
-};
-
-// START:spy
 class WavReader {
 public:
    WavReader(
          const std::string& source, 
          const std::string& dest,
          std::shared_ptr<WavDescriptor> descriptor=0);
-   // ...
-// END:spy
    virtual ~WavReader();
    void open(const std::string& name, bool trace);
    void list(
@@ -45,23 +27,6 @@ public:
          std::vector<boost::filesystem::path>& found) const;
    void listAll() const;
    void publishSnippets();
-
-   void writeSamples(std::ostream* out, char* data, 
-         uint32_t startingSample, 
-         uint32_t samplesToWrite, 
-         uint32_t bytesPerSample,
-         uint32_t channels=1);
-
-   uint32_t dataLength(
-         uint32_t samples, 
-         uint32_t bytesPerSample,
-         uint32_t channels) const;
-
-   void writeSnippet(
-         const std::string& name, std::istream& file, std::ostream& out,
-         FormatSubchunk& formatSubchunk,
-         DataChunk& dataChunk,
-         char* data);
 
    void useFileUtil(std::shared_ptr<FileUtil>);
 
