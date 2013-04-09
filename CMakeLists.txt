@@ -1,8 +1,8 @@
 project(SnippetPublisher)
 cmake_minimum_required(VERSION 2.6)
 
-include_directories(~/boost_1_51_0 ~/rlog-1.4 ~/cpputest/include)
-link_directories(~/rlog-1.4/rlog/.libs ${RLOG_BINARY_DIR}/rlog ~/cpputest)
+include_directories($ENV{BOOST_HOME}/ $ENV{RLOG_HOME} $ENV{CPPUTEST_HOME}/include)
+link_directories($ENV{RLOG_HOME}/rlog/.libs ${RLOG_BINARY_DIR}/rlog $ENV{CPPUTEST_HOME})
 
 add_subdirectory(rlog)
 
@@ -18,11 +18,9 @@ find_package(Boost 1.51.0 COMPONENTS filesystem system)
 target_link_libraries(utest ${Boost_LIBRARIES})
 target_link_libraries(utest CppUTest)
 target_link_libraries(utest pthread)
-target_link_libraries(utest rt)
 target_link_libraries(utest rlogStub)
 
 target_link_libraries(SnippetPublisher ${Boost_LIBRARIES})
 target_link_libraries(SnippetPublisher pthread)
-target_link_libraries(SnippetPublisher rt)
 target_link_libraries(SnippetPublisher rlog)
 
