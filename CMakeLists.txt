@@ -1,7 +1,7 @@
 project(SnippetPublisher)
 cmake_minimum_required(VERSION 2.6)
 
-include_directories($ENV{BOOST_HOME}/ $ENV{RLOG_HOME} $ENV{CPPUTEST_HOME}/include)
+include_directories($ENV{BOOST_ROOT}/ $ENV{RLOG_HOME} $ENV{CPPUTEST_HOME}/include)
 # START_HIGHLIGHT
 link_directories($ENV{RLOG_HOME}/rlog/.libs 
    ${RLOG_BINARY_DIR}/rlog 
