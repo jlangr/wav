@@ -35,7 +35,7 @@ TEST(FileUtil_Size, AnswersFileContentSize) {
    createTempFile(content);
 
    size_t expectedSize { content.length() + sizeof('\0') };
-   CHECK_EQUAL(expectedSize, (unsigned)util.size(TempFileName));
+   LONGS_EQUAL(expectedSize, (unsigned)util.size(TempFileName));
 }
 // END:tests
 
@@ -54,7 +54,7 @@ TEST(FileUtil_Execute, IsPassedStreamFromFile) {
    };
    auto result = util.execute(TempFileName, func);
 
-   CHECK_EQUAL(returnValue, result);
+   LONGS_EQUAL(returnValue, result);
    CHECK_EQUAL(content, buffer);
 }
 
@@ -67,6 +67,6 @@ TEST(FileUtil_Execute, DemonstratedWithStreamUtilSizeFunction) {
                   [&](istream& s) { return StreamUtil::size(s); });
 // END:clientDemo
 
-   CHECK_EQUAL(content.length() + sizeof('\0'), (unsigned)size);
+   LONGS_EQUAL(content.length() + sizeof('\0'), (unsigned)size);
 }
 
