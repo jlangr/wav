@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 
 include_directories($ENV{BOOST_ROOT}/ $ENV{RLOG_HOME} $ENV{CPPUTEST_HOME}/include)
 link_directories($ENV{RLOG_HOME}/rlog/.libs $ENV{CPPUTEST_HOME}/lib)
+set(Boost_USE_STATIC_LIBS ON)
 
 add_definitions(-std=c++0x)
 
