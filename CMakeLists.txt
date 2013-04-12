@@ -7,6 +7,7 @@ link_directories($ENV{RLOG_HOME}/rlog/.libs
    ${RLOG_BINARY_DIR}/rlog 
    $ENV{CPPUTEST_HOME}/lib)
 # END_HIGHLIGHT
+set(Boost_USE_STATIC_LIBS ON)
 
 # START_HIGHLIGHT
 add_subdirectory(rlog)
