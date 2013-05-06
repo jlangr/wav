@@ -41,7 +41,7 @@ public:
 
       uint32_t totalSeconds { totalSamples / formatSubchunk.samplesPerSecond };
 
-      rLog(channel_, "total seconds %i ", totalSeconds);
+      rLog(channel_, "total seconds %u ", totalSeconds);
 
       dataChunk.length = dataLength(
             samplesToWrite, 
@@ -76,7 +76,7 @@ public:
          uint32_t samplesToWrite, 
          uint32_t bytesPerSample,
          uint32_t channels=1) {
-      rLog(channel_, "writing %i samples", samplesToWrite);
+      rLog(channel_, "writing %u samples", samplesToWrite);
 
       for (auto sample = startingSample; 
            sample < startingSample + samplesToWrite; 

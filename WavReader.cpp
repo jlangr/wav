@@ -155,10 +155,10 @@ void WavReader::readAndWriteHeaders(
 
    out.write(reinterpret_cast<char*>(&formatSubchunk), sizeof(FormatSubchunk));
 
-   rLog(channel, "format tag: %i", formatSubchunk.formatTag); // show as hex?
-   rLog(channel, "samples per second: %i", formatSubchunk.samplesPerSecond);
-   rLog(channel, "channels: %i", formatSubchunk.channels);
-   rLog(channel, "bits per sample: %i", formatSubchunk.bitsPerSample);
+   rLog(channel, "format tag: %u", formatSubchunk.formatTag); // show as hex?
+   rLog(channel, "samples per second: %u", formatSubchunk.samplesPerSecond);
+   rLog(channel, "channels: %u", formatSubchunk.channels);
+   rLog(channel, "bits per sample: %u", formatSubchunk.bitsPerSample);
 
    auto bytes = formatSubchunkHeader.subchunkSize - sizeof(FormatSubchunk);
 
@@ -178,7 +178,7 @@ void WavReader::readAndWriteHeaders(
       file.read(reinterpret_cast<char*>(&factOrData), sizeof(FactOrData));
       out.write(reinterpret_cast<char*>(&factOrData), sizeof(FactOrData));
 
-      rLog(channel, "samples per channel: %i", factChunk.samplesPerChannel);
+      rLog(channel, "samples per channel: %u", factChunk.samplesPerChannel);
    }
 
    if (toString(factOrData.tag, 4) != "data") {
