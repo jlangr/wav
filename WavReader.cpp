@@ -131,10 +131,10 @@ void WavReader::open(const std::string& name, bool trace) {
 
    out.write(reinterpret_cast<char*>(&formatSubchunk), sizeof(FormatSubchunk));
 
-   rLog(channel, "format tag: %i", formatSubchunk.formatTag); // show as hex?
-   rLog(channel, "samples per second: %i", formatSubchunk.samplesPerSecond);
-   rLog(channel, "channels: %i", formatSubchunk.channels);
-   rLog(channel, "bits per sample: %i", formatSubchunk.bitsPerSample);
+   rLog(channel, "format tag: %u", formatSubchunk.formatTag); // show as hex?
+   rLog(channel, "samples per second: %u", formatSubchunk.samplesPerSecond);
+   rLog(channel, "channels: %u", formatSubchunk.channels);
+   rLog(channel, "bits per sample: %u", formatSubchunk.bitsPerSample);
 
    auto bytes = formatSubchunkHeader.subchunkSize - sizeof(FormatSubchunk);
 
@@ -154,7 +154,7 @@ void WavReader::open(const std::string& name, bool trace) {
       file.read(reinterpret_cast<char*>(&factOrData), sizeof(FactOrData));
       out.write(reinterpret_cast<char*>(&factOrData), sizeof(FactOrData));
 
-      rLog(channel, "samples per channel: %i", factChunk.samplesPerChannel);
+      rLog(channel, "samples per channel: %u", factChunk.samplesPerChannel);
    }
 
    if (toString(factOrData.tag, 4) != "data") {
@@ -166,10 +166,10 @@ void WavReader::open(const std::string& name, bool trace) {
    DataChunk dataChunk;
    file.read(reinterpret_cast<char*>(&dataChunk), sizeof(DataChunk));
 
-   rLog(channel, "riff header size = %i" , sizeof(RiffHeader));
-   rLog(channel, "subchunk header size = %i", sizeof(FormatSubchunkHeader));
-   rLog(channel, "subchunk size = %i", formatSubchunkHeader.subchunkSize);
-   rLog(channel, "data length = %i", dataChunk.length);
+   rLog(channel, "riff header size = %u" , sizeof(RiffHeader));
+   rLog(channel, "subchunk header size = %u", sizeof(FormatSubchunkHeader));
+   rLog(channel, "subchunk size = %u", formatSubchunkHeader.subchunkSize);
+   rLog(channel, "data length = %u", dataChunk.length);
    
    // TODO if odd there is a padding byte!
 
@@ -192,7 +192,7 @@ void WavReader::open(const std::string& name, bool trace) {
    samplesToWrite = min(samplesToWrite, totalSamples);
 
    uint32_t totalSeconds{totalSamples / formatSubchunk.samplesPerSecond};
-   rLog(channel, "total seconds %i ", totalSeconds);
+   rLog(channel, "total seconds %u ", totalSeconds);
 
    dataChunk.length = samplesToWrite * bytesPerSample;
    out.write(reinterpret_cast<char*>(&dataChunk), sizeof(DataChunk));
@@ -205,7 +205,7 @@ void WavReader::open(const std::string& name, bool trace) {
    writeSamples(out, data, startingSample, samplesToWrite, bytesPerSample);
 // END_HIGHLIGHT
 
-   rLog(channel, "writing %i samples", samplesToWrite);
+   rLog(channel, "writing %u samples", samplesToWrite);
 
    for (auto sample = startingSample; 
         sample < startingSample + samplesToWrite; 
