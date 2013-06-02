@@ -118,14 +118,14 @@ TEST_GROUP(WavReader_WriteSnippet) {
 
    const int ArbitraryFileSize{5};
 
-   void setup() {
+   void setup() override {
       data = new char[4];
 // START_HIGHLIGHT
       reader.useFileUtil(fileUtil);
 // END_HIGHLIGHT
    }
 
-   void teardown() {
+   void teardown() override {
       mock().clear();
       delete[] data;
    }
