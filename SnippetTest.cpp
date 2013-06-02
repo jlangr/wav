@@ -109,11 +109,11 @@ TEST_GROUP(Snippet_Write) {
 
    const int ArbitraryFileSize{5};
 
-   void setup() {
+   void setup() override {
       data = new char[4];
    }
 
-   void teardown() {
+   void teardown() override {
       mock().clear();
       delete[] data;
    }
