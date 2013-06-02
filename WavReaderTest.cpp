@@ -8,10 +8,10 @@
 
 using namespace std;
 
+// END:test
 TEST_GROUP(WavReader) {
 };
 
-// END:test
 TEST(WavReader, HasExtension) {
    string s{"a.bcd"};
    CHECK(!hasExtension(s, "xxxx"));
