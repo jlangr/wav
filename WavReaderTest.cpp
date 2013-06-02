@@ -104,11 +104,11 @@ TEST_GROUP(WavReader_WriteSnippet) {
    char* data;
    uint32_t TwoBytesWorthOfBits{2 * 8};
 
-   void setup() {
+   void setup() override {
       data = new char[4];
    }
 
-   void teardown() {
+   void teardown() override {
       mock().clear();
       delete[] data;
    }
