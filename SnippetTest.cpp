@@ -13,7 +13,7 @@ public:
       const string&, const string&, 
       uint32_t totalSeconds, 
       uint32_t, uint32_t,
-      uint32_t fileSize) {
+      uint32_t fileSize) override {
       mock().actualCall("add")
          .withParameter("totalSeconds", (int)totalSeconds)
          .withParameter("fileSize", (int)fileSize);
@@ -22,7 +22,7 @@ public:
 
 class MockFileUtil: public FileUtil {
 public:
-   streamsize size(const string& name) {
+   streamsize size(const string& name) override {
       return mock().actualCall("size").returnValue().getIntValue();
    }
 };
