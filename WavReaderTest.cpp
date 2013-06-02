@@ -83,19 +83,19 @@ public:
       const string&, const string&, 
       uint32_t totalSeconds, 
       uint32_t, uint32_t,
-      uint32_t fileSize) {
+      uint32_t fileSize) override {
       mock().actualCall("add")
          .withParameter("totalSeconds", (int)totalSeconds)
 // START_HIGHLIGHT
          .withParameter("fileSize", (int)fileSize);
 // END_HIGHLIGHT
-   }
+   } 
 };
 
 // START_HIGHLIGHT
 class MockFileUtil: public FileUtil {
 public:
-   streamsize size(const string& name) {
+   streamsize size(const string& name) override {
       return mock().actualCall("size").returnValue().getIntValue();
    }
 };
