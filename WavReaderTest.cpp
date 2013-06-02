@@ -82,12 +82,12 @@ public:
    void add(
       const string&, const string&, 
       uint32_t totalSeconds, 
-      uint32_t, uint32_t) {
+      uint32_t, uint32_t) override {
 // START_HIGHLIGHT
       mock().actualCall("add")
          .withParameter("totalSeconds", (int)totalSeconds);
 // END_HIGHLIGHT
-   }
+   } 
 };
 // END:mock
 
